@@ -37,7 +37,13 @@ fig = px.scatter_geo(
     hover_name="placename",
     animation_frame="month",
     title="Place Name Mentions Over Time",
-    projection="natural earth"
+    projection="orthographic",  # 3D globe style
+)
+
+fig.update_geos(
+    center=dict(lat=31.5, lon=34.5),  # Centered around Gaza
+    projection_scale=6,              # Zoom level (higher = more zoomed in)
+    showland=True, landcolor="LightGray",
 )
 
 
