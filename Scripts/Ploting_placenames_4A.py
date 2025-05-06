@@ -14,7 +14,7 @@ print("Counts DF columns:", counts_df.columns.tolist())
 print("Gazetteer DF columns:", gazetteer_df.columns.tolist())
 
 
-#Merge based on the 'placename' column: Help taken from discussion forum and Chat GPT- solution 1
+#Merge based on the 'placename' column: Help taken from discussion forum (from Peter) and Chat GPT- solution 1
 merged_df = pd.merge(counts_df, gazetteer_df, left_on="placename", right_on="name", how="left")
 
 
@@ -37,13 +37,17 @@ fig = px.scatter_geo(
     hover_name="placename",
     animation_frame="month",
     title="Place Name Mentions Over Time",
-    projection="orthographic",  # 3D globe style
+    projection="mercator",  # This was suggested by AI to me for more clear map
 )
 
+# To make the map close and stick to the place where most of the place names resides: Help taken fro Mathew and Chat GPT - Solution 3
 fig.update_geos(
     center=dict(lat=31.5, lon=34.5),  # Centered around Gaza
-    projection_scale=6,              # Zoom level (higher = more zoomed in)
-    showland=True, landcolor="LightGray",
+    projection_scale=8,              # Zoom level (higher = more zoomed in: learned from AI)
+    showland=True,
+    landcolor="LightGray",
+    showcountries=True,
+    countrycolor="black",
 )
 
 

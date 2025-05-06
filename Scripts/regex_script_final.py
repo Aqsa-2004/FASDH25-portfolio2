@@ -1,20 +1,17 @@
 #Imprt necessary libraries:
-#For pattern matching using regular expressions
-import re
-#To interact with the file system (e.g., read files from folders) 
-import os
-#To work with tabular data and export to .tsv format
-import pandas as pd
+import re #regular expressions are used to search for flexible versions of place names (like different spellings): learned from class material 
+import os #this is for navigating files and folders (e.g., reading all files in the articles/ folder): Also learned from class material
+import pandas as pd #Used for navigating files and folders and also to deal with tsv files. 
 
 #This function saves data (a list of rows) to a .tsv file using pandas: Help taken from exeecises 10.1, class works.
 
 def write_tsv(rows, column_list, path):
 
-     #create a DataFrame from the data
+     #This function creates a DataFrame (like a spreadsheet) with the given data and column names, and saves it as a .tsv file.
     df = pd.DataFrame(rows, columns=column_list)
     
-    # save it as a .tsv file (tab-separated)
-    df.to_csv(path, sep="\t", index=False)
+    # save it as a .tsv file seperated by tab (\t)
+    df.to_csv(path, sep="\t", index=False) #index=False means the row indices (0, 1, 2,...) won't be written to the file.
 
 
 # Defining the folder where the articles are present
@@ -24,7 +21,7 @@ folder = "articles"
 # Load the list of place names (gazetteer) from a TSV file: Help taken from exeecises 10.1, class works 
 path = "gazetteers/geonames_gaza_selection.tsv"
 with open(path, encoding="utf-8") as file:
-    data = file.read()
+    data = file.read() #The reads the gazetteer file (.tsv) which contains place names and their variants.
 
 # This function helps build a flexible regular expression for each place name
 def flexible_regex(name):
