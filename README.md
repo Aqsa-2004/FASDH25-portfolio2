@@ -1,125 +1,247 @@
-# FASDH25-portfolio2
-### Group members: Aqsa Anwerali, Sarir Ahmed and Kamran Abid.
-## Folder Structure:
-We have structured our folder in a unique way to make it easy for us: 
-- GAZA_NER_Aqsa_Sarir_Kamran
-- regex_script_sarir_aqsa_kamran.ipynb  
-- articles
-- gazetteer.txt      
-- ner_counts.tsv    
-- regex_counts.tsv  
-- maps    
-- map_ner_jan2024.png
-- map_regex_jan2024.png
+# Mini Project 2
 
-## 2A: Place Name Counter using Regex
-It focuses on identifying and counting how often specific place names (mainly from Gaza) appear in a collection of news articles. We use regular expressions (regex) to find flexible matches for place names — allowing for different spellings and variations.
-### Objectives:
-- To apply regex patterns for identifying place names in text.
-- To track how often these names appear in articles after the Gaza war began on October 7, 2023.
-- To output the results in a tab-separated values (TSV) file for further analysis.
-### Tools and Libraries:
-- Python
-- `re` (for regex)
-- `os` (for file handling)
-- `pandas` (for tabular data and TSV export)
-### Code Structure: (AI helped me made this flow)
-project_2a/
+## Project Blurb
+
+This project explores how to visualize the places mentioned in news articles over time. Using computational tools, we extract toponyms (place names), geocode them (retrieve latitude and longitude), and visualize how the geographic scope of the news evolves. We use both regular expressions with a gazetteer and Named Entity Recognition (NER) techniques.
+
+## Folder Structure
+```
+FASDH25-portfolio2/
+|
+├── articles/                       #### Collection of news articles
+├── AI Documentation/               ### This document includes all the AI helps we took from Chat GPT. It has all the chats with names in it. 
+├── gazetteers/                    #### Gazetteer files with place names, which were already in this folder
+│   └── geonames_gaza_selection.tsv
+├── Data Outputs/                       #### Python scripts used in the project are all saved here in this porject 
+│   ├── Frequencies.tsv
+│   ├── ner_counts.tsv
+│   ├── NER_gazetteer.tsv
+│   └── ner_map.html
+│   └── ner_map.png
+│   ├── regex_counts.tsv
+│   └── regex_map.html
+│   └── regex_map.png
 │
-├── articles/ # Folder with article text files
-├── gazetteers/
-│ └── geonames_gaza_selection.tsv # File with place names and their alternate spellings
-├── regex_counter.py # Main script for the project
-└── regex_counts.tsv # Output file with monthly counts
-### Output:
+├── Scripts/                       #### All the outputs of the scripts are stored here for more easy access.
+│   ├── Gaza_NER2_aqsa_kamran_sarir.ipynb
+│   ├── maping_ner.tsv
+│   ├── NER_gazetteer.tsv
+│   ├── ploting_placenames_4A.tsv
+│   └── regex_script_final.tsv
+└── README.md                      #### This documentation file is the overall readme where we have mentioned overall progress. 
+```
+
+---------------------------------------------
+
+## 2A: Counting place names using Regex
+
+### Overview:
+
+This part focuses on identifying and counting how often specific place names (mainly from Gaza) appear in a collection of news articles using regular expressions.
+
+### Objectives
+
+* Apply regex to identify place names.
+* Track their frequency after the Gaza war began on October 7, 2023.
+* Output results in a TSV file for later use.
+
+### Tools and Libraries
+
+* Python
+* `re`, `os`, `pandas`
+
+### Output (example):
+
+```
 placename     month     count
 Gaza          2023-10   34
 Rafah         2023-11   18
 Khan Younis   2023-12   22
-...
+```
 
+------------------------------------------------------------------------
 
+## 2B: Place Name Extraction using Stanza (NER) from the corpus
 
-## 2B. Use stanza to extract all place names from (part of) the corpus
-### Overview: 
-this part focuses on extracting place names from news articles published in January 2024, using Stanza's NER (Named Entity Recognition) model.
-### NLP Environment Setup: 
-This code was done in google colab that's why it varies from other codes of this mini project.
-1. Library Installation:
-   - Installed the `stanza` Python library.
-   - Downloaded the English language model using `stanza.download('en')`.
-2. Pipeline Configuration:
-   - Initialized a Stanza NLP pipeline for English text with the NER processor enabled.
-   - This pipeline allows Stanza to recognize named entities — specifically location names — in the text.
-### Corpus Preparation
-1. Repository Cloning:
-   - Cloned the GitHub repository: `FASDH25-portfolio2`, which contains the full text corpus (documents and all required articles).
-2. Directory Linking:
-   - Defined the file path to the directory containing the articles, allowing the script to access and process the documents directly.
-3. Temporal Filtering:
-   - Applied a filter to process only files starting with `2024-01`, targeting articles published in January 2024 specifically.
-### OutPut:
-The output was place names and counts as give bellow:
-place	count
-Israel	5567
-Gaza	5565
-Palestine	427
-United States	557
-Welch	4
-...
-
-## 3: Geocoding Place Names
-### Overview: 
-In this project, we have extracted place names mentioned in January 2024 and mapped them using Natural Language Processing (NLP) method. We have evaluated the accuracy of two methods to recognize geographical entities; Named Entity Recognition (NER) using Stanza and Regex with a gazetteer.
-### Input Data:
-- Used `ner_counts.tsv`  
-  This file contains place names identified in the earlier NLP phase (2B) using the Stanza library.
-### Code Process:
-1. Libraries Used:
-   - `requests` – to send HTTP requests to the GeoNames API
-   - `time` – to introduce delays between API calls and avoid rate-limiting
-2. Function Defined:
-   - A custom Python function `get_coordinates()` was created to query the GeoNames REST API.
-   - Parameters used:
-     - `username=kamran.abid`
-     - `fuzzy=0` – ensures more precise matches
-     - `maxRows=1` – limits the number of returned results to one per query
-3. Data Extraction:
-   - The TSV file was read line by line, and unique place names were extracted into a list.
-4. API Querying:
-   - For each place name, the script queried the GeoNames API.
-   - If a result was found, the latitude and longitude were recorded.
-   - If not found (due to spelling or missing data), `"NA"` was assigned for both coordinates.
-   - The data with "NA" in front of the names, were checked and added manually on excell and then the output saved.
-5. Result Structuring:
-   - All retrieved data was organized into a list of dictionaries:
-     ```json
-     [{"Place": "Lahore", "Latitude": "31.5497", "Longitude": "74.3436"}, ...]
-     ```
-6. Output File:
-   - `NER_gazetteer.tsv` was created containing three columns:
-     
-
-## 4A: Plotting Places Mentioned, Mapping – Gaza War
 ### Overview:
-This project visualizes how often different place names were mentioned in a collection of articles about the Gaza war, using geographic coordinates and an animated map. It builds upon the output from 2A (regex_counts.tsv) and maps these mentions over time using Plotly.
-### File used:
-- regex_counts.tsv: Output from 2A, contains place names, months, and count of mentions.
-- geonames_gaza_selection.tsv: A gazetteer with location names and coordinates
-### Flow of the code:
-- Imports libraries like pandas and plotly.
-- Reads the mention data from regex_counts.tsv.
-- Loads the gazetteer file to get place coordinates.
-- Merges both files using the placename and name columns to attach coordinates to the mention data.
-- Prints previews to check if merging worked and what cities were included.
-- Creates a geographic map using Plotly that animates month by month.
-- Saves the outputs
-### Output: 
-- An interactive globe-style map that shows which places were mentioned each month.
-- A still snapshot version of the map for reports or presentations.
-### Note: 
-1. Before running this code, make sure regex_counts.tsv and geonames_gaza_selection.tsv are in the correct folders.
-2. Run the script in Python because it is written according to it, not google colab. 
-3. Check the data Output for regex_map.html and regex_map.png.
-             
-## 4B: 
+
+This part extracts place names from articles published in January 2024, using the `stanza` Named Entity Recognition (NER) model.
+
+### Environment Setup
+
+* Done in Google Colab
+* Installed `stanza`
+* Downloaded English model: `stanza.download('en')`
+
+### Corpus and Filtering
+
+* Cloned GitHub repo: `FASDH25-portfolio2`
+* Linked path to articles directory
+* Filtered files starting with `2024-01`
+
+### Output (example):
+
+```
+place           count
+Israel          5567
+Gaza            5565
+Palestine       427
+United States   557
+Welch           4
+```
+
+-----------------------------------------------------
+
+## 3: Creating gazetteer for NER places
+
+### Overview:
+
+In this section, we created a gazetteer which is a table that list place names along with their longitude and lattitde.
+
+### Input Data
+
+* `ner_counts.tsv` from 2B
+
+### Tools and Functions
+
+* Python libraries: `requests`, `time`
+* GeoNames API (username: `kamran.abid`)
+* Custom `get_coordinates()` function
+
+### Process Summary
+
+1. Read place names from TSV
+2. Query GeoNames API for coordinates
+3. Assign "NA" if not found
+4. Manually corrected missing entries in Excel
+5. Saved results in `NER_gazetteer.tsv`
+
+### Output (structure):
+
+```json
+[
+  {"Place": "Lahore", "Latitude": "31.5497", "Longitude": "74.3436"},
+  ...
+]
+```
+
+-----------------------------------
+
+## 4A: Mapping Mentions, Gaza War (Regex-Based)
+
+### Overview:
+
+This part creates an animated map showing the monthly frequency of Gaza-related place mentions.
+
+### Files Used
+
+* `regex_counts.tsv`
+* `geonames_gaza_selection.tsv`
+
+### Code Workflow
+
+* Libraries: `pandas`, `plotly`
+* Merged mention data with gazetteer coordinates
+* Created animated and still map versions
+
+### Output
+
+* `regex_map.html`: Interactive globe-style map
+* `regex_map.png`: Static snapshot
+
+### Notes
+
+1. Place files in correct directories
+2. Script runs in local Python, not Colab
+
+---------------------------------------------------------------------------------------------------------------
+
+## 4B: Mapping NER Results
+
+### Overview:
+
+In this part we made a map that is showing the places that we extracted byy using NER, from text in january 2024. 
+
+### Inputs:
+
+* ner_counts.tsv   this file had the list of place bnames 
+
+* NER_gazetteer.tsv    This file had coordinate s
+
+### Process:
+
+1. Merge files on place names.
+
+2. Create a map with dot sizes reflecting mentioneded frequency.
+
+### Output:
+
+* ner_map.html
+
+* ner_map.png
+
+-----------------------------------------------
+
+## Technique Comparison:
+### REgex and Gazetteer:
+* Adventages: 
+- Regex gave us very accurate results if the word list is made weill.
+- It is easy to understand how it works and how to change the patterns as well. 
+- no need of complex tools or training. there were just simple rules. If you know them well you can do whatever you want. 
+- you can make certain types of regex to match any word you want. 
+
+* Disadventages: 
+- It does not work well if the location is no in the list, or even a slight spelling mistake can make the result very different. 
+- you have to keep updating the list mannually to add new places, which takes time. 
+- sometimes it matches the wrong word by mistake. 
+
+### Named Entity Recognition (NER):
+* Adventages: 
+- NER can find new or unknown places not only the words which are present in the list.
+- you don't need to keep a word list, it is automatic and the work load is less in this case.
+- It can understand different structures and sentences, and still finds the correct location through its own internal machanism
+
+* Disadventages:
+- It may sometimes mis or wrongly label uncommon or local place names specially in less known languages or areas. 
+- It is haeder to figure out why it made a mistake.
+
+----------------------------------------------------------------
+
+## Self Critical Analysis:
+
+In this project, we used two methods to pull out information from war-related articles: Regex with a Gazetteer and a NER (Named Entity Recognition) model. Both methods helped us track how locations were mentioned over time using monthly data. While they gave us useful results, we also faced some technical problems.
+
+### Weaknesses:
+- When place names were misspelled, shortened, or new names (like small villages or different versions of "Khan Younis") were used, the methods missed them.
+- the maps became messy because the tools picked up too many incorrect or repeated locations. This happened because the NER model wasn’t trained well for this kind of data.
+- We had limited experience with Python and the libraries, so we faced many technical difficulties. It was hard for us to connect the steps, fix errors, and make the code work smoothly.
+### What we could improve if we had more time:
+- We learned that Regex was too strict, and NER gave too many useless results. A combination of both methods could have helped. For example, NER could catch many places, and then Regex or a Gazetteer could help clean up the results by removing wrong ones and keeping rare but important places.
+- Many place names were missed due to small spelling mistakes. We could have used edit distance algorithms (which find close spellings) to catch those missing names, especially for places written in different languages.
+- One problem was that NER results were not connected to the months in the data. Regex results were better at showing which place was mentioned in which month. With more time, we could have tried to link places to the correct time in a more reliable way to better track how things changed over time.
+
+--------------------------------------------------------------------------------------
+
+## Final Map Images:
+### ![ner_map](Data Outputs/ner_map.png)
+### ![regex_map](Data Outputs/regex_map.png)
+
+## Comparing both images: 
+### NER Map (Named Entity Recognition)
+- Picks up real place names more accurately.
+- Shows a broad, global spread of locations.
+- Feels smarter — it understands context, not just patterns.
+- Fewer mistakes — doesn’t grab random words as locations.
+- Needs a bit more setup (libraries like spaCy or similar), but worth it.
+
+### Regex Map
+- Includes some incorrect or irrelevant data (false positives).
+- Coverage is patchy — some regions dense, others almost empty.
+- Just looks for patterns — doesn’t understand meaning.
+- May require manual cleanup of wrong or weird matches.
+- Easy to implement quickly with basic Python skills.
+
+--------------------------------
+
+The End...
+

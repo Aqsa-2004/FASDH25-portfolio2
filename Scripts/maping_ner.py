@@ -1,4 +1,4 @@
-#import required libraries. 
+#import required libraries: Help taken from class work 10.1
 import pandas as pd  #Our smart helper that reads and organizes data like a librarian
 import plotly.express as px  #This one draws beautiful maps and graphs for us!
 import kaleido  #USed to take a screenshot (PNG) of our map
@@ -11,7 +11,7 @@ places_df = pd.read_csv(coordinates_path, sep="\t")  # \t means the file is sepa
 counts_path = "C:/Users/LENOVO/Downloads/FASDH25-portfolio2/Data Outputs/ner_counts.tsv"
 ner_df = pd.read_csv(counts_path, sep="\t")
 
-#Making sure all our labels (column names) are in lowercase. this is because it will not create any issue later on for the case.
+#Making sure all our labels (column names) are in lowercase. this is because it will not create any issue later on for the case. Help taken from one of my friends and 10.1 class work
 places_df.columns = places_df.columns.str.lower()
 ner_df.columns = ner_df.columns.str.lower()
 
@@ -31,7 +31,7 @@ merged_df['latitude'] = pd.to_numeric(merged_df['latitude'], errors='coerce')
 merged_df['longitude'] = pd.to_numeric(merged_df['longitude'], errors='coerce')
 merged_df = merged_df.dropna(subset=['latitude', 'longitude'])  # We don’t want floating castles (missing locations)!
 
-#draw an interactive magic map! The more a place was mentioned, the bigger it glows.
+#draw an interactive magic map! The more a place was mentioned, the bigger it glows: Help taken from Chat GPT - Solution 1
 fig = px.scatter_geo(
     merged_df,
     lat="latitude",
@@ -43,7 +43,7 @@ fig = px.scatter_geo(
     projection="natural earth"  #Flat, Earthy map (no spinning globe for now!)
 )
 
-#Let's give our map a cool look with oceans, rivers, and lands
+#Let's give our map a cool look with oceans, rivers, and lands: Help taken from Chat GPT- solution 2
 fig.update_layout(
     title="Places Mentioned in January 2024",
     title_font_size=20,
