@@ -1,6 +1,7 @@
 # FASDH25-portfolio2
 ### Group members: Aqsa Anwerali, Sarir Ahmed and Kamran Abid.
 ## Folder Structure:
+We have structured our folder in a unique way to make it easy for us: 
 - GAZA_NER_Aqsa_Sarir_Kamran
 - regex_script_sarir_aqsa_kamran.ipynb  
 - articles
@@ -22,7 +23,7 @@ It focuses on identifying and counting how often specific place names (mainly fr
 - `re` (for regex)
 - `os` (for file handling)
 - `pandas` (for tabular data and TSV export)
-### Code Structure:
+### Code Structure: (AI helped me made this flow)
 project_2a/
 │
 ├── articles/ # Folder with article text files
@@ -40,20 +41,64 @@ Khan Younis   2023-12   22
 
 
 ## 2B. Use stanza to extract all place names from (part of) the corpus
-This part uses Stanza's Named Entity Recognition (NER) model to extract place names from articles published in January 2024. 
+### Overview: 
+this part focuses on extracting place names from news articles published in January 2024, using Stanza's NER (Named Entity Recognition) model.
+### NLP Environment Setup: 
+This code was done in google colab that's why it varies from other codes of this mini project.
+1. Library Installation:
+   - Installed the `stanza` Python library.
+   - Downloaded the English language model using `stanza.download('en')`.
+2. Pipeline Configuration:
+   - Initialized a Stanza NLP pipeline for English text with the NER processor enabled.
+   - This pipeline allows Stanza to recognize named entities — specifically location names — in the text.
+### Corpus Preparation
+1. Repository Cloning:
+   - Cloned the GitHub repository: `FASDH25-portfolio2`, which contains the full text corpus (documents and all required articles).
+2. Directory Linking:
+   - Defined the file path to the directory containing the articles, allowing the script to access and process the documents directly.
+3. Temporal Filtering:
+   - Applied a filter to process only files starting with `2024-01`, targeting articles published in January 2024 specifically.
+### OutPut:
+The output was place names and counts as give bellow:
+place	count
+Israel	5567
+Gaza	5565
+Palestine	427
+United States	557
+Welch	4
+...
 
-- First, we set up the NLP environmnet for which we installed the stanza library and downloaded the English language model for it. Then to enable entity recognition on English text, we created a processing pathway and this established the basis for recognizing place names in our corpus. 
-- After that to link up with the corpus, we cloned the FASDH25-portfolio2 GitHub repository that contained all the documents and articles we needed. To make it easier for the script to find these articles we specified the directory pathway in which they were stored.
-- Furthermore, we restricted the corpus to process only files that began with 2024-01 which made it possible to target articles from January 2024 specifically.
-- We extracted place names for each of the chosen articles using Stanza's NER model. We focused on entities with the designations LOC (location) and GPE (geopolitical entities). The frequency of each of these names' occurrences was documented in a dictionary.
-- We wrote a script to clean and normalize the names after noticing some discrepancies. Among them were:
-Removing possessives such as "Gaza's", eliminating punctuation, removing articles like "The".
-- We added the output to a TSV file called ner_counts.tsv, which contained two columns: Place and Count, after the place names had been cleaned and counted. The data was now ready for the third phase.
-- The cleaned data was then prepared for use in creating maps to show the geographical distribution of place mentions in the January 2024 articles, even though we did not complete the visualization in the same notebook.
-
-
-## 3: Analyze and Visualize place names found in articles about the Gaza war.
+## 3: Geocoding Place Names
+### Overview: 
 In this project, we have extracted place names mentioned in January 2024 and mapped them using Natural Language Processing (NLP) method. We have evaluated the accuracy of two methods to recognize geographical entities; Named Entity Recognition (NER) using Stanza and Regex with a gazetteer.
+### Input Data:
+- Used `ner_counts.tsv`  
+  This file contains place names identified in the earlier NLP phase (2B) using the Stanza library.
+### Code Process:
+1. Libraries Used:
+   - `requests` – to send HTTP requests to the GeoNames API
+   - `time` – to introduce delays between API calls and avoid rate-limiting
+2. Function Defined:
+   - A custom Python function `get_coordinates()` was created to query the GeoNames REST API.
+   - Parameters used:
+     - `username=kamran.abid`
+     - `fuzzy=0` – ensures more precise matches
+     - `maxRows=1` – limits the number of returned results to one per query
+3. Data Extraction:
+   - The TSV file was read line by line, and unique place names were extracted into a list.
+4. API Querying:
+   - For each place name, the script queried the GeoNames API.
+   - If a result was found, the latitude and longitude were recorded.
+   - If not found (due to spelling or missing data), `"NA"` was assigned for both coordinates.
+   - The data with "NA" in front of the names, were checked and added manually on excell and then the output saved.
+5. Result Structuring:
+   - All retrieved data was organized into a list of dictionaries:
+     ```json
+     [{"Place": "Lahore", "Latitude": "31.5497", "Longitude": "74.3436"}, ...]
+     ```
+6. Output File:
+   - `NER_gazetteer.tsv` was created containing three columns:
+     
 
 ## 4A: Plotting Places Mentioned, Mapping – Gaza War
 ### Overview:

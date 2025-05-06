@@ -4,7 +4,6 @@ import os #this is for navigating files and folders (e.g., reading all files in 
 import pandas as pd #Used for navigating files and folders and also to deal with tsv files. 
 
 #This function saves data (a list of rows) to a .tsv file using pandas: Help taken from exeecises 10.1, class works.
-
 def write_tsv(rows, column_list, path):
 
      #This function creates a DataFrame (like a spreadsheet) with the given data and column names, and saves it as a .tsv file.
@@ -23,7 +22,7 @@ path = "gazetteers/geonames_gaza_selection.tsv"
 with open(path, encoding="utf-8") as file:
     data = file.read() #The reads the gazetteer file (.tsv) which contains place names and their variants.
 
-# This function helps build a flexible regular expression for each place name
+# Through this function I build a flexible regular expression for each place name
 def flexible_regex(name):
     # Create variations to catch alternate spellings and transliterations: Help taken with Chat GPT, Solution 1 and cross checked from website: https://regex101.com/
     name = re.sub(r"Kh", r"(Kh|K|Ḫ)", name, flags=re.IGNORECASE)
@@ -67,7 +66,7 @@ for row in rows[1:]:
             alternate = alternate.strip()
             # add the alternate name to the list if present 
             if alternate:
-                name_variants.append(alternate)  # add valid alternates
+                name_variants.append(alternate)  # these alternatives are added to name_Varriants.
 
     #apply flexible matching to all name variants: Help taken from one of my friends working on the same project
     new_variants = []
@@ -94,10 +93,10 @@ mentions_per_month = {}
 war_start_date = "2023-10-07"
 
 for filename in os.listdir(folder):
-    # Extract the date from the filename(as the format is YYYY-MM-DD_)
+    # Extract the date from the filename and tthe format is y-m-d.
     date_str = filename.split("_")[0]
 
-    #Skip the file if it is before the start of  the war as mentioned in the project
+    #Skip the file if it is before the start of  the war as mentioned in the project instructions.
     if date_str < war_start_date:
         continue
     
