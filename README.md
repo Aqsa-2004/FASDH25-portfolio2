@@ -24,6 +24,7 @@ This part uses Stanza's Named Entity Recognition (NER) model to extract place 
 - We wrote a script to clean and normalize the names after noticing some discrepancies. Among them were:
 Removing possessives such as "Gaza's", eliminating punctuation, removing articles like "The".
 - We added the output to a TSV file called ner_counts.tsv, which contained two columns: Place and Count, after the place names had been cleaned and counted. The data was now ready for the third phase.
+- The cleaned data was then prepared for use in creating maps to show the geographical distribution of place mentions in the January 2024 articles, even though we did not complete the visualization in the same notebook.
 
 
              
